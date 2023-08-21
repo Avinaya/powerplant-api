@@ -6,19 +6,20 @@ import com.proshore.powerplant.dto.PostCodeRangeResponse;
 import com.proshore.powerplant.entity.Battery;
 import com.proshore.powerplant.exception.ResourceNotFoundException;
 import com.proshore.powerplant.repository.BatteryRepository;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.mockito.MockitoAnnotations;
 
 import java.util.Collections;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
-@SpringBootTest
 public class BatteryServiceTests {
 
     @Mock
@@ -26,6 +27,11 @@ public class BatteryServiceTests {
 
     @InjectMocks
     private BatteryServiceImpl batteryService;
+
+    @BeforeEach
+    public void setUp() {
+        MockitoAnnotations.openMocks(this);
+    }
 
     @Test
     public void testSaveBattery() {
@@ -45,13 +51,13 @@ public class BatteryServiceTests {
         // Call the service method
         List<BatteryResponse> batteryResponses = batteryService.saveBattery(batteryRequests);
 
-        // Verify the repository method was called with the correct argument
-        verify(batteryRepository).saveAll(anyList());
-
         // Assertions
         assertEquals(savedBatteries.size(), batteryResponses.size());
         assertEquals(savedBatteries.get(0).getName(), batteryResponses.get(0).getName());
         assertEquals(savedBatteries.get(1).getCapacity(), batteryResponses.get(1).getCapacity());
+
+        // Verify the repository method was called with the correct argument
+        verify(batteryRepository).saveAll(anyList());
     }
 
     @Test

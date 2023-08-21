@@ -5,7 +5,6 @@ import com.proshore.powerplant.dto.BatteryResponse;
 import com.proshore.powerplant.dto.PostCodeRangeResponse;
 import com.proshore.powerplant.service.BatteryService;
 import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -31,8 +30,6 @@ public class BatteryControllerTests {
     @MockBean
     private BatteryService batteryService;
 
-    @InjectMocks
-    private BatteryController batteryController;
 
     @Test
     public void testSaveBatteries() throws Exception {
@@ -47,7 +44,7 @@ public class BatteryControllerTests {
         when(batteryService.saveBattery(any())).thenReturn(savedBatteries);
 
         // Perform POST request
-        mockMvc.perform(post("/v1/battery")
+        mockMvc.perform(post("/v1/batteries")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("[{\"name\": \"Battery 1\", \"postcode\": \"10001\", \"capacity\": 100}]")) // Match BatteryResponse structure
                 .andExpect(status().isCreated())
@@ -70,7 +67,7 @@ public class BatteryControllerTests {
         when(batteryService.getBatteries(startPostcode, endPostcode)).thenReturn(response);
 
         // Perform GET request
-        mockMvc.perform(get("/v1/battery")
+        mockMvc.perform(get("/v1/batteries")
                         .param("startPostcode", startPostcode)
                         .param("endPostcode", endPostcode))
                 .andExpect(status().isOk())
